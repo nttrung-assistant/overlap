@@ -526,6 +526,10 @@ export const PAGE = `<!doctype html>
 
   loadFromUrl();
   if (!state.zones.length) state.zones = defaultZones();
+  // sync controls from state BEFORE readControls reads them back,
+  // so URL params (?ok=) are not clobbered by the HTML defaults
+  els.okfrom.value = state.from;
+  els.okto.value = state.to;
   renderAll();
   setInterval(function () { renderGrid(); }, 60000);
 })();
