@@ -495,6 +495,14 @@ export const PAGE = `<!doctype html>
     history.replaceState(null, '', currentUrl());
     renderGrid(); renderVerdict();
   }
+  // live update while typing: clamp only when the value parses, never rewrite the field
+  function onInputHours() {
+    var f = parseInt(els.okfrom.value, 10), t = parseInt(els.okto.value, 10);
+    if (!isNaN(f)) state.from = Math.min(23, Math.max(0, f));
+    if (!isNaN(t)) state.to = Math.min(23, Math.max(0, t));
+    history.replaceState(null, '', currentUrl());
+    renderGrid(); renderVerdict();
+  }
   function renderAll() { renderPeople(); renderPick(); readControls(); }
 
   els.add.addEventListener('click', function () {
@@ -506,6 +514,8 @@ export const PAGE = `<!doctype html>
   });
   els.okfrom.addEventListener('change', readControls);
   els.okto.addEventListener('change', readControls);
+  els.okfrom.addEventListener('input', onInputHours);
+  els.okto.addEventListener('input', onInputHours);
   els.refzone.addEventListener('change', readControls);
   els.copy.addEventListener('click', function () { copyLink(els.copy); });
   els.copy2.addEventListener('click', function () { copyLink(els.copy2); });
